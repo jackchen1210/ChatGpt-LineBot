@@ -16,7 +16,7 @@ chatgpt = ChatGPT()
 # domain root
 @app.route('/')
 def home():
-    return 'Hello, World!'
+    return 'Success!'
 
 @app.route("/webhook", methods=['POST'])
 def callback():
@@ -35,33 +35,39 @@ def callback():
 
 @line_handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    global working_status
+    # global working_status
     
     if event.message.type != "text":
         return
     
-    if event.message.text == "奴才":
-        working_status = True
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="我是閣下的奴才，目前可以為您服務囉，歡迎來跟我互動~"))
-        return
+    # if event.message.text == "奴才":
+    #     working_status = True
+    #     line_bot_api.reply_message(
+    #         event.reply_token,
+    #         TextSendMessage(text="我是閣下的奴才，目前可以為您服務囉，歡迎來跟我互動~"))
+    #     return
 
-    if event.message.text == "閉嘴":
-        working_status = False
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="感謝主人的使用，若需要我的服務，請跟我說 「奴才」 謝謝~"))
-        return
+    # if event.message.text == "閉嘴":
+    #     working_status = False
+    #     line_bot_api.reply_message(
+    #         event.reply_token,
+    #         TextSendMessage(text="感謝主人的使用，若需要我的服務，請跟我說 「奴才」 謝謝~"))
+    #     return
     
-    if working_status:
-        chatgpt.add_msg(f"Human:{event.message.text}?\n")
+    # if working_status:
+    if event.message.text.startswith("奴才"):
+        text = event.message.text.remove_prefix("奴才")
+        chatgpt.add_msg(f"Human:{text}?\n")
         reply_msg = chatgpt.get_response().replace("AI:", "", 1)
         chatgpt.add_msg(f"AI:{reply_msg}\n")
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=reply_msg))
 
+def remove_prefix(text, prefix):
+    if text.startswith(prefix):
+        return text[len(prefix):]
+    return text  # or whatever
 
 if __name__ == "__main__":
     app.run()
