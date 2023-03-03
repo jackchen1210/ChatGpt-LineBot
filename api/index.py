@@ -56,7 +56,7 @@ def handle_message(event):
     
     # if working_status:
     if event.message.text.startswith("奴才"):
-        text = event.message.text.remove_prefix("奴才")
+        text = event.message.text[len("奴才"):]
         chatgpt.add_msg(f"Human:{text}?\n")
         reply_msg = chatgpt.get_response().replace("AI:", "", 1)
         chatgpt.add_msg(f"AI:{reply_msg}\n")
