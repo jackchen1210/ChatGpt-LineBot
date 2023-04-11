@@ -16,7 +16,7 @@ chatgpt = ChatGPT()
 # domain root
 @app.route('/')
 def home():
-    return 'Success!'
+    return 'Success! 23:15'
 
 @app.route("/webhook", methods=['POST'])
 def callback():
@@ -40,6 +40,7 @@ def handle_message(event):
     if event.message.type != "text":
         return
     
+    print("OPENAI_API_KEY : " +  os.getenv("OPENAI_API_KEY"))
     # if event.message.text == "奴才":
     #     working_status = True
     #     line_bot_api.reply_message(
