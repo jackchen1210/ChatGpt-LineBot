@@ -7,6 +7,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 class ChatGPT:
     def __init__(self):
+        print("OPENAI_API_KEY : " +  os.getenv("OPENAI_API_KEY"))
         self.prompt = Prompt()
         self.model = os.getenv("OPENAI_MODEL", default = "text-davinci-003")
         #self.model = os.getenv("OPENAI_MODEL", default = "chatbot")
