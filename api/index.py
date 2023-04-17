@@ -57,6 +57,12 @@ def handle_message(event):
     
     # if working_status:
     if event.message.text.startswith("奴才"):
+        
+         line_bot_api.reply_message(
+             event.reply_token,
+             TextSendMessage(text="奴才已死，有事燒紙。"))
+        
+        return
         text = event.message.text[len("奴才"):]
         chatgpt.add_msg(f"Human:{text}?\n")
         reply_msg = chatgpt.get_response().replace("AI:", "", 1)
